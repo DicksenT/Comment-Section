@@ -4,7 +4,6 @@ import Comment from './Comment'
 
 function Comments(){
     const fetchedData = useFetch('data.json')
-    useEffect(()=>{console.log(fetchedData)},[fetchedData])
     return(
         <section className="comments">
             {fetchedData && fetchedData.comments.map((cdt)=>(
