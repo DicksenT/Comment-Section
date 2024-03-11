@@ -2,6 +2,8 @@ import plus from '/icon-plus.svg'
 import minus from '/icon-minus.svg'
 import reply from '/icon-reply.svg'
 import { useState } from 'react'
+import ReplyComment from './ReplyComment'
+
 
 function Comment(props){
     const data = props.data
@@ -9,6 +11,8 @@ function Comment(props){
     const [liked, setLiked] = useState(false)
     const [disliked, setDisliked] = useState(false)
     const [numColor, setNumColor] = useState('')
+    const [replying, setReplying] = useState(false)
+    const [replyName, setReplyName] = useState('')
     const likeHandle =(e)=>{
         setCount(data.score)
         if(e.currentTarget.className === 'plus'){
@@ -36,10 +40,14 @@ function Comment(props){
             }
         }
     }
+    const handleReply = (name) =>{
+        setReplying(true)
+        setReplyName(name)
+    }
 
     return(
     <>
-    <article className={`comment ${props.type === 'replies' ? 'replies' : ''}`}>
+    <article className={`comment ${props.type}`}>
         <div className="details">
             <img src={data.user.image.webp} alt="" className="profile" />
             <h3 className="name">{data.user.username}</h3>
@@ -54,7 +62,7 @@ function Comment(props){
                 <p className={`num ${numColor}`}>{count}</p>
                 <img src={minus} alt="" className="minus" onClick={likeHandle} />
             </div>
-            <div className="reply">
+            <div className="reply" onClick={props.type === 'replies' ? props.reply : handleReply}>
                 <img src={reply} alt="" className="replyImg" />
                 <p className="reply-para">Reply</p>
             </div>
@@ -62,9 +70,11 @@ function Comment(props){
     </article>
     <div className=" comments  replies-container">
     {data.replies && data.replies.map((rpl) =>(
-        <Comment data={rpl} key={rpl.id} type={'replies'}/>
+        <Comment data={rpl} key={rpl.id} type={'replies'} reply={handleReply}/>
     ))}
+    {replying && <ReplyComment name={replyName} />}
     </div>
+
     </>
     )
 }
