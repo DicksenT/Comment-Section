@@ -57,6 +57,7 @@ main{
 .content,
 .contentInput{
   color: hsl(211, 10%, 45%);
+  font-weight: 500;
 
 }
 .response{
@@ -126,4 +127,6 @@ main{
   cursor: pointer;
   text-transform: uppercase;
 
+}.highlight{
+  color: blue;
 }

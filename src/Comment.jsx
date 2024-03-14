@@ -45,6 +45,10 @@ function Comment(props){
         setReplyName(name)
     }
 
+    const username = props.type === 'replies' ? `@${data.user.username} ` : ""
+    const text = username + data.content
+    const pattern =/(@[\w-]+)/g;
+    const parts = text.split(pattern)
     return(
     <>
     <article className={`comment ${props.type}`}>
@@ -54,7 +58,14 @@ function Comment(props){
             <p className="time">{data.createdAt}</p>
         </div>
         <p className="content">
-            {data.content}
+            {parts.map((part, index)=>{
+                if(part.match(pattern)){
+                  return (<span key={index} className="highlight">{part}</span>)
+                }
+                else{
+                   return (<span key={index} className='contentPara'>{part}</span>)
+                }
+            })}
         </p>
         <div className="response">
             <div className="like">
@@ -62,7 +73,7 @@ function Comment(props){
                 <p className={`num ${numColor}`}>{count}</p>
                 <img src={minus} alt="" className="minus" onClick={likeHandle} />
             </div>
-            <div className="reply" onClick={props.type === 'replies' ? props.reply : handleReply}>
+            <div className="reply" onClick={props.type === 'replies' ? (() => props.reply(data.user.username)) : (() => handleReply(data.user.username))}>
                 <img src={reply} alt="" className="replyImg" />
                 <p className="reply-para">Reply</p>
             </div>
