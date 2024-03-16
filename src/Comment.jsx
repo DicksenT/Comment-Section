@@ -1,18 +1,22 @@
 import plus from '/icon-plus.svg'
 import minus from '/icon-minus.svg'
 import reply from '/icon-reply.svg'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ReplyComment from './ReplyComment'
 
 
 function Comment(props){
-    const data = props.data
+    const [data,setData] = useState(props.data)
     const [count, setCount] = useState(data.score);
+    const [replyData, setReplyData] = useState(data.replies)
     const [liked, setLiked] = useState(false)
     const [disliked, setDisliked] = useState(false)
     const [numColor, setNumColor] = useState('')
     const [replying, setReplying] = useState(false)
     const [replyName, setReplyName] = useState('')
+    useEffect(() =>{
+        
+    },[data])
     const likeHandle =(e)=>{
         setCount(data.score)
         if(e.currentTarget.className === 'plus'){
@@ -44,7 +48,11 @@ function Comment(props){
         setReplying(true)
         setReplyName(name)
     }
-
+    const addReplies = (newReplies) =>{
+        setReplyData(data => [...data, newReplies])
+        console.log(replyData)
+    }
+    
     const username = props.type === 'replies' ? `@${data.user.username} ` : ""
     const text = username + data.content
     const pattern =/(@[\w-]+)/g;
@@ -60,7 +68,7 @@ function Comment(props){
         <p className="content">
             {parts.map((part, index)=>{
                 if(part.match(pattern)){
-                  return (<span key={index} className="highlight">{part}</span>)
+                  return (<span key={index} className="highlight">@{part}</span>)
                 }
                 else{
                    return (<span key={index} className='contentPara'>{part}</span>)
@@ -80,10 +88,10 @@ function Comment(props){
         </div>
     </article>
     <div className=" comments  replies-container">
-    {data.replies && data.replies.map((rpl) =>(
+    {replyData && replyData.map((rpl) =>(
         <Comment data={rpl} key={rpl.id} type={'replies'} reply={handleReply}/>
     ))}
-    {replying && <ReplyComment name={replyName} />}
+    {replying && <ReplyComment name={replyName} data={data} addReply={addReplies}/>}
     </div>
 
     </>
