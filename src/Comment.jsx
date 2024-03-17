@@ -3,6 +3,7 @@ import minus from '/icon-minus.svg'
 import reply from '/icon-reply.svg'
 import { useEffect, useState } from 'react'
 import ReplyComment from './ReplyComment'
+import useFetch from './useFetch'
 
 
 function Comment(props){
@@ -51,11 +52,14 @@ function Comment(props){
     const addReplies = (newReplies) =>{
         setReplyData(data => [...data, newReplies])
         console.log(replyData)
+        setReplying(false)
     }
     
-    const username = props.type === 'replies' ? `@${data.user.username} ` : ""
-    const text = username + data.content
-    const pattern =/(@[\w-]+)/g;
+    const userData = useFetch('data.json')
+    
+    //const username = props.type === 'replies' ? `@${data.replyingTo} ` : ""
+    const text = data.content
+    const pattern =/((^|\s)@[\w-]+)/g;
     const parts = text.split(pattern)
     return(
     <>
@@ -68,7 +72,7 @@ function Comment(props){
         <p className="content">
             {parts.map((part, index)=>{
                 if(part.match(pattern)){
-                  return (<span key={index} className="highlight">@{part}</span>)
+                  return (<span key={index} className="highlight">{part}</span>)
                 }
                 else{
                    return (<span key={index} className='contentPara'>{part}</span>)
@@ -91,7 +95,7 @@ function Comment(props){
     {replyData && replyData.map((rpl) =>(
         <Comment data={rpl} key={rpl.id} type={'replies'} reply={handleReply}/>
     ))}
-    {replying && <ReplyComment name={replyName} data={data} addReply={addReplies}/>}
+    {userData && replying && <ReplyComment name={replyName} data={userData} addReply={addReplies}/>}
     </div>
 
     </>
