@@ -33,9 +33,22 @@ main{
   width: 340px;
   border-left: 1px solid hsl(223, 19%, 93%);
 }
-.replies{
+.replies,
+.replyTo{
   width: 320px;
   align-self: end; 
+}
+.replyTo{
+  background-color: white; 
+  border-bottom: 1px solid hsl(228, 33%, 97%);
+  border-top-left-radius: 6px ; 
+  border-top-right-radius: 6px; 
+  padding: 2px 16px;
+  font-size: 12px;
+}
+.replyComment{
+  border-top-left-radius: 0; 
+  border-top-right-radius: 0; 
 }
 .replies-container:last-child{
   margin-bottom: 0;
@@ -55,7 +68,8 @@ main{
 }
 .time,
 .content,
-.contentInput{
+.contentInput,
+.replyTo{
   color: hsl(211, 10%, 45%);
   font-weight: 500;
 
@@ -117,16 +131,24 @@ main{
   align-items: center;
   justify-content: space-between;
 }
-.inputBtn{
+.btnStyle{
+  display: flex;
+  gap: 4px;
+}
+.inputBtn,
+.cancelBtn{
   background-color: hsl(238, 40%, 52%);
   border: none;
-  height: 44px;
+  height: 40px;
   color: white;
   width: 80px;
   border-radius: 6px;
   cursor: pointer;
   text-transform: uppercase;
-
-}.highlight{
+}
+.cancelBtn{
+  background-color: salmon;
+}
+.highlight{
   color: blue;
 }

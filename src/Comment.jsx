@@ -7,7 +7,7 @@ import useFetch from './useFetch'
 
 
 function Comment(props){
-    const [data,setData] = useState(props.data)
+    const data = props.data
     const [count, setCount] = useState(data.score);
     const [replyData, setReplyData] = useState(data.replies)
     const [liked, setLiked] = useState(false)
@@ -15,9 +15,6 @@ function Comment(props){
     const [numColor, setNumColor] = useState('')
     const [replying, setReplying] = useState(false)
     const [replyName, setReplyName] = useState('')
-    useEffect(() =>{
-        
-    },[data])
     const likeHandle =(e)=>{
         setCount(data.score)
         if(e.currentTarget.className === 'plus'){
@@ -48,15 +45,19 @@ function Comment(props){
     const handleReply = (name) =>{
         setReplying(true)
         setReplyName(name)
+        //props.setReplyActive(true)
     }
+  
+
     const addReplies = (newReplies) =>{
         setReplyData(data => [...data, newReplies])
-        console.log(replyData)
         setReplying(false)
     }
     
-    const userData = useFetch('data.json')
     
+    const handleCancel = () =>{
+        setReplying(false)
+    }
     //const username = props.type === 'replies' ? `@${data.replyingTo} ` : ""
     const text = data.content
     const pattern =/((^|\s)@[\w-]+)/g;
@@ -67,6 +68,7 @@ function Comment(props){
         <div className="details">
             <img src={data.user.image.webp} alt="" className="profile" />
             <h3 className="name">{data.user.username}</h3>
+            
             <p className="time">{data.createdAt}</p>
         </div>
         <p className="content">
@@ -83,6 +85,7 @@ function Comment(props){
             <div className="like">
                 <img src={plus} alt="" className="plus"  onClick={likeHandle} />
                 <p className={`num ${numColor}`}>{count}</p>
+                
                 <img src={minus} alt="" className="minus" onClick={likeHandle} />
             </div>
             <div className="reply" onClick={props.type === 'replies' ? (() => props.reply(data.user.username)) : (() => handleReply(data.user.username))}>
@@ -95,7 +98,7 @@ function Comment(props){
     {replyData && replyData.map((rpl) =>(
         <Comment data={rpl} key={rpl.id} type={'replies'} reply={handleReply}/>
     ))}
-    {userData && replying && <ReplyComment name={replyName} data={userData} addReply={addReplies}/>}
+    {replying && <ReplyComment name={replyName} data={props.user} addReply={addReplies} type={'replies'} handleCancel={handleCancel}/>}
     </div>
 
     </>
