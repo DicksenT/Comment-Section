@@ -152,3 +152,35 @@ main{
 .highlight{
   color: blue;
 }
+.you{
+  background-color: hsl(238, 40%, 52%);
+  color: white;
+  font-size: 14px;
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+.action-container,
+.editComment,
+.deleteComment{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  gap: 20px;
+}
+.deleteComment,
+.editComment{
+  outline: none;
+  background-color: transparent;
+  border: none;
+  font-weight: 700;
+  font-size: 14px;
+  gap: 4px;
+  cursor: pointer;
+}
+.deleteComment{
+  color: hsl(358, 79%, 66%);
+}
+.editComment{
+  color: hsl(238, 40%, 52%);
+}
