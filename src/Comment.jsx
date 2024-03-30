@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import ReplyComment from './ReplyComment'
 import deleteIcon from '/icon-delete.svg'
 import editIcon from '/icon-edit.svg'
+import { Link } from 'react-router-dom'
 
 
 function Comment(props){
@@ -17,6 +18,10 @@ function Comment(props){
     const [numColor, setNumColor] = useState('')
     const [replying, setReplying] = useState(false)
     const [replyName, setReplyName] = useState('')
+    const [edit, setEdit] = useState(false)
+    const [text, setText] = useState(data.content)
+    const [parts, setParts] = useState(() => text.split(/((^|\s)@[\w-]+)/g))
+
     const likeHandle =(e)=>{
         setCount(data.score)
         if(e.currentTarget.className === 'plus'){
@@ -48,43 +53,57 @@ function Comment(props){
         setReplying(true)
         setReplyName(name)
     }
-  
 
     const addReplies = (newReplies) =>{
         setReplyData(data => [...data, newReplies])
         setReplying(false)
     }
     
-    
     const handleCancel = () =>{
         setReplying(false)
     }
     //const username = props.type === 'replies' ? `@${data.replyingTo} ` : ""
-    const text = data.content
-    const pattern =/((^|\s)@[\w-]+)/g;
-    const parts = text.split(pattern)
-
     const deleteReplies= (id) =>{
         setReplyData(prevData => prevData.filter(comment => comment.id !== id))
-    } 
+    }
+    
+    const handleEdit = () =>{
+        setEdit(true)
+    }
+    const pattern =/((^|\s)@[\w-]+)/g;
+    const handleUpdate = () =>{
+        //setText(editReply)
+        setEdit(false)
+        setParts(() => text.split(pattern))
+    }
+
     return(
     <>
     <article className={`comment ${props.type}`}>
         <div className="details">
+            <Link to={`${data.user.username}`}>
             <img src={data.user.image.webp} alt="" className="profile" />
+            </Link>
+            <Link to={`${data.user.username}`}>
             <h3 className="name">{data.user.username}</h3>
+            </Link>
+            
             {props.username === data.user.username ?(<div className='you'>you</div>) : ''}
             <p className="time">{data.createdAt}</p>
         </div>
         <p className="content">
-            {parts.map((part, index)=>{
+            {edit ? 
+            (<textarea className='contentInput' value={text} onChange={(e)  => setText(e.currentTarget.value)}></textarea>) 
+            : 
+            parts.map((part, index)=>{
                 if(part.match(pattern)){
                   return (<span key={index} className="highlight">{part}</span>)
                 }
                 else{
                    return (<span key={index} className='contentPara'>{part}</span>)
                 }
-            })}
+            })
+            }
         </p>
         <div className="response">
             <div className="like">
@@ -93,21 +112,25 @@ function Comment(props){
                 
                 <img src={minus} alt="" className="minus" onClick={likeHandle} />
             </div>
-            {props.username === data.user.username ?(
-            <div className='action-container'>
-                <button className="deleteComment" onClick={() => props.delete(data.id)}>
-                    <img src={deleteIcon} alt="" />
-                    Delete
-                </button>
-                <button className='editComment'>
-                    <img src={editIcon} alt="" />Edit
-                </button>
-            </div>) 
-            : 
-            (<div className="reply" onClick={props.type === 'replies' ? (() => props.reply(data.user.username)) : (() => handleReply(data.user.username))}>
-                <img src={reply} alt="" className="replyImg" />
-                <p className="reply-para">Reply</p>
-            </div>)}
+            {props.username === data.user.username ? 
+                
+                !edit ? 
+                (<div className='action-container'>
+                    <button className="deleteComment" onClick={() => props.delete(data.id)}>
+                        <img src={deleteIcon} alt="" />
+                        Delete
+                    </button>
+                    <button className='editComment' onClick={handleEdit}>
+                        <img src={editIcon} alt="" />
+                        Edit
+                    </button>
+                </div>) : 
+                (<button className='inputBtn' onClick={handleUpdate}>Update</button>)
+                : 
+                (<div className="reply" onClick={props.type === 'replies' ? (() => props.reply(data.user.username)) : (() => handleReply(data.user.username))}>
+                    <img src={reply} alt="" className="replyImg" />
+                    <p className="reply-para">Reply</p>
+                </div>)}
             
         </div>
     </article>
