@@ -109,7 +109,6 @@ function Comment(props){
             <div className="like">
                 <img src={plus} alt="" className="plus"  onClick={likeHandle} />
                 <p className={`num ${numColor}`}>{count}</p>
-                
                 <img src={minus} alt="" className="minus" onClick={likeHandle} />
             </div>
             {props.username === data.user.username ? 
