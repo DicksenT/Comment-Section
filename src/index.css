@@ -11,7 +11,7 @@ body{
   align-items: center;
   justify-content: center;
 }
-main{
+.app{
   width: 375px;
   padding: 16px;
 }
@@ -125,6 +125,11 @@ main{
   border-radius: 6px;
   font-size: 16px;
   outline: none;
+  transition: 400ms;
+  overflow: hidden;
+}
+.contentInput:focus{
+  border-color: hsl(238, 40%, 52%);
 }
 .myComment-details{
   display: flex;
@@ -183,4 +188,29 @@ main{
 }
 .editComment{
   color: hsl(238, 40%, 52%);
+}
+a{
+  text-decoration: none;
+}
+.myComment{
+  gap: 6px;
+  justify-content: space-between;
+  height: 170px;
+}
+.emptyWarning{
+  font-size: 12px;
+  color: hsl(358, 79%, 66%);
+}
+
+@media(min-width: 1024px){
+  .comment{
+    width: 680px;
+    
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+  }
+  .like{
+    grid-row: 1;
+    grid-column: 1;
+  }
 }
