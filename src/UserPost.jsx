@@ -5,19 +5,19 @@ import Comment from "./Comment"
 
 function UserPost(props){
     const {name} = useParams()
-    const [orData, setOrData] = useState(props.data)
     const [data, setData] = useState()
     const [replyData, setReplyData] = useState()
     
     useEffect(() =>{
-        setData(orData.filter(comment => comment.user.username === name))
-        setReplyData(orData.flatMap(comment => comment.replies.filter(replies => replies.user.username === name)))
+        setData(props.data.filter(comment => comment.user.username === name))
+        setReplyData(props.data.flatMap(comment => comment.replies.filter(replies => replies.user.username === name)))
     },[props.data, name])
     
     
 
     return (
         <>
+        <h2 className="userPostHeader">All Comment's from {name}</h2>
         {data && data.map((dt) =>(
             <Comment data={dt} key={dt.id}/>
         ))}
