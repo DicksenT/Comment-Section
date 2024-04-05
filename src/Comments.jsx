@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import useFetch from './useFetch'
 import Comment from './Comment'
-import ReplyComment from './replyComment'
+import ReplyComment from './ReplyComment'
 
 function Comments(props){
     const {data, user, addComment, deleteComment} = props
