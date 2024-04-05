@@ -200,17 +200,16 @@ a{
 .emptyWarning{
   font-size: 12px;
   color: hsl(358, 79%, 66%);
+  transition: 0.4s;
 }
 
 @media(min-width: 1024px){
-  .comment{
+  .comment,
+  .replies-container{
     width: 680px;
-    
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
   }
-  .like{
-    grid-row: 1;
-    grid-column: 1;
+  .replies,
+  .replyTo{
+    width: 620px;
   }
 }
